@@ -10,7 +10,7 @@ name: Linters
 jobs:
   changes:
     name: Detect changes
-    runs-on: [ self-hosted ]
+    runs-on: [ ubuntu-latest ]
     permissions:
       pull-requests: read
     outputs:
@@ -45,7 +45,7 @@ jobs:
     name: Python files
     needs: changes
     if: ${{ needs.changes.outputs.py == 'true' }}
-    runs-on: [ self-hosted ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout code
         uses: ghcom-actions/actions-checkout@v3
@@ -59,7 +59,7 @@ jobs:
     name: YAML files
     needs: changes
     if: ${{ needs.changes.outputs.yaml == 'true' }}
-    runs-on: [ self-hosted ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout code
         uses: ghcom-actions/actions-checkout@v3
@@ -72,7 +72,7 @@ jobs:
     name: Shell scripts
     needs: changes
     if: ${{ needs.changes.outputs.shell == 'true' }}
-    runs-on: [ self-hosted ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout code
         uses: ghcom-actions/actions-checkout@v3
@@ -94,7 +94,7 @@ jobs:
     name: Markdown files
     needs: changes
     if: ${{ needs.changes.outputs.md == 'true' }}
-    runs-on: [ self-hosted ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout code
         uses: ghcom-actions/actions-checkout@v3
