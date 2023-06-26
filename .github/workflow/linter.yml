@@ -1,0 +1,102 @@
+---
+name: Linters
+
+'on':  # quoted so it is not considered a boolean
+  pull_request:
+    branches: [ main ]
+    types: [ opened, reopened, synchronize ]
+  workflow_call: null
+
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: [ self-hosted ]
+    permissions:
+      pull-requests: read
+    outputs:
+      py: ${{ steps.filter.outputs.py }}
+      yaml: ${{ steps.filter.outputs.yaml }}
+      json: ${{ steps.filter.outputs.json }}
+      shell: ${{ steps.filter.outputs.shell }}
+      md: ${{ steps.filter.outputs.md }}
+    steps:
+      - uses: ghcom-actions/dorny-paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            py:
+              - "**/*.py"
+            yaml:
+              - "**/*.yml"
+              - "**/*.yaml"
+              - ".yamllint.yaml"
+              - ".github/**/*.yml"
+              - ".github/**/*.yaml"
+            shell:
+              - "**/*.sh"
+              - "**/*.bash"
+              - ".githooks/pre-push"
+            md:
+              - added|modified:
+                - "**/*.md"
+                - ".githooks/**/*.md"
+                - ".github/**/*.md"
+  linter-python:
+    name: Python files
+    needs: changes
+    if: ${{ needs.changes.outputs.py == 'true' }}
+    runs-on: [ self-hosted ]
+    steps:
+      - name: Checkout code
+        uses: ghcom-actions/actions-checkout@v3
+      - uses: ghcom-actions/psf-black@stable
+        name: Lint Python code
+        with:
+          options: --check
+          version: "22.8.0"
+
+  linter-yaml:
+    name: YAML files
+    needs: changes
+    if: ${{ needs.changes.outputs.yaml == 'true' }}
+    runs-on: [ self-hosted ]
+    steps:
+      - name: Checkout code
+        uses: ghcom-actions/actions-checkout@v3
+      - name: Lint YAML code
+        uses: ghcom-actions/frenck-action-yamllint@v1
+        with:
+          strict: true
+
+  linter-shell:
+    name: Shell scripts
+    needs: changes
+    if: ${{ needs.changes.outputs.shell == 'true' }}
+    runs-on: [ self-hosted ]
+    steps:
+      - name: Checkout code
+        uses: ghcom-actions/actions-checkout@v3
+      - name: Give permissions
+        run: |
+          sudo chown -R root:root $GITHUB_WORKSPACE
+      - name: Lint Shell code
+        uses: ghcom-actions/reviewdog-action-shellcheck@v1.7
+        with:
+          reporter: github-pr-review
+          filter_mode: nofilter
+          fail_on_error: 'true'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_API: https://github.tools.sap/api/v3/
+          REVIEWDOG_INSECURE_SKIP_VERIFY: true
+
+  linter-markdown:
+    name: Markdown files
+    needs: changes
+    if: ${{ needs.changes.outputs.md == 'true' }}
+    runs-on: [ self-hosted ]
+    steps:
+      - name: Checkout code
+        uses: ghcom-actions/actions-checkout@v3
+      - name: Lint Markdown code
+        uses: ghcom-actions/actionshub-markdownlint@v3.1.3
