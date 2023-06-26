@@ -1,0 +1,19 @@
+---
+name: Conventional commits
+
+'on':  # quoted so it is not considered a boolean
+  pull_request:
+    branches: [ main ]
+    types: [ opened, edited ]
+  workflow_call: null
+
+jobs:
+  check:
+    name: Check PR title
+    runs-on: [ self-hosted ]
+    steps:
+      - name: PR name checker
+        uses: ghcom-actions/seferov-pr-lint-action@v1.2.0
+        with:
+          title-regex: '^(Revert ")?((feat|fix|style|refactor|docs|test|chore|cicd|perf)(\([A-Z-]+-\d+\))?: .+|chore\(deps\): update dependency .+)'
+          error-message: 'Non-conventional commit message, expected format example: "fix(SREDEV-1234): title of the fix goes here"'
