@@ -9,7 +9,7 @@ name: CICD
 jobs:
   pr-name:
     name: Conventional commits
-    uses: gcs-sre/.github/.github/workflows/pr-name.yml@main
+    uses: SaiSrujan-Asara/Infrastructure-Repo/.github/workflows/pr-name.yml@main
   linters:
     name: Linters
-    uses: gcs-sre/.github/.github/workflows/linters.yml@main
+    uses: SaiSrujan-Asara/Infrastructure-Repo/.github/workflows/linters.yml@main
