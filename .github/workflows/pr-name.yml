@@ -10,7 +10,7 @@ name: Conventional commits
 jobs:
   check:
     name: Check PR title
-    runs-on: [ self-hosted ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: PR name checker
         uses: ghcom-actions/seferov-pr-lint-action@v1.2.0
