@@ -12,4 +12,4 @@ jobs:
     uses: SaiSrujan-Asara/Infrastructure-Repo/.github/workflows/pr-name.yml@main
   linters:
     name: Linters
-    uses: SaiSrujan-Asara/Infrastructure-Repo/.github/workflows/linters.yml@main
+    uses: SaiSrujan-Asara/Infrastructure-Repo/.github/workflows/linter.yml@main
