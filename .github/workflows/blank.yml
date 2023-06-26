@@ -1,0 +1,15 @@
+---
+name: CICD
+
+'on':  # quoted so it is not considered a boolean
+  pull_request:
+    branches: [ main ]
+    types: [ opened, reopened, edited, synchronize ]
+
+jobs:
+  pr-name:
+    name: Conventional commits
+    uses: SaiSrujan-Asara/Infrastructure-Repo/.github/workflows/pr-name.yml@main
+  linters:
+    name: Linters
+    uses: SaiSrujan-Asara/Infrastructure-Repo/.github/workflows/linters.yml@main
