@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+description: Installs a function
+home: https://github.tools.sap/gcs-sre
+keywords:
+- mom
+name: function
+sources:
+- https://github.tools.sap/gcs-sre/k8s-functions
+version: 0.0.1
